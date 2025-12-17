@@ -8,6 +8,9 @@ const formSchema = z.object({
 	email: z.email('Invalid email address'),
 	phoneNumber: z.string().min(7, 'Invalid phone number'),
 	plan: z.enum(['arcade', 'advanced', 'pro']),
+	addons: z.array(
+		z.enum(['onlineService', 'largerStorage', 'customizableProfile'])
+	),
 });
 
 export default function FormProviderLayout() {

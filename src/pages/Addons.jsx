@@ -1,3 +1,55 @@
+import { useFormContext, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { ToggleGroup } from 'radix-ui';
+
 export default function Addons() {
-	return <div>Addons</div>;
+	const { control, watch } = useFormContext();
+
+	const navigate = useNavigate();
+
+	const selectedAddons = watch('addons');
+
+	const nextStep = () => {
+		navigate('/summary');
+	};
+
+	return (
+		<div>
+			<form>
+				<h1>Pick add-ons</h1>
+				<p>Add-ons help enhance your gaming experience.</p>
+
+				<Controller
+					name="addons"
+					control={control}
+					render={({ field }) => (
+						<ToggleGroup.Root type="multiple" onValueChange={field.onChange}>
+							<ToggleGroup.Item value="onlineService">
+								<p>Online service</p>
+								<p>Access to multiplayer games</p>
+							</ToggleGroup.Item>
+							<ToggleGroup.Item value="largerStorage">
+								<p>Larger storage</p>
+								<p>Extra 1TB of cloud save</p>
+							</ToggleGroup.Item>
+							<ToggleGroup.Item value="customizableProfile">
+								<p>Customizable profile</p>
+								<p>Custom theme on your profile</p>
+							</ToggleGroup.Item>
+						</ToggleGroup.Root>
+					)}
+				/>
+
+				<p>Addons: {selectedAddons}</p>
+
+				<button type="button" onClick={() => navigate(-1)}>
+					Go back
+				</button>
+
+				<button type="button" onClick={nextStep}>
+					Next Step
+				</button>
+			</form>
+		</div>
+	);
 }
