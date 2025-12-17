@@ -7,6 +7,7 @@ const formSchema = z.object({
 	fullName: z.string().min(3, 'Your name must be at least 3 characters long'),
 	email: z.email('Invalid email address'),
 	phoneNumber: z.string().min(7, 'Invalid phone number'),
+	plan: z.enum(['arcade', 'advanced', 'pro']),
 });
 
 export default function FormProviderLayout() {
