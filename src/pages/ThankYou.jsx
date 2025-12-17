@@ -1,5 +1,3 @@
 export default function ThankYou() {
-  return (
-    <div>Thank You</div>
-  )
+	return <div>Thank You</div>;
 }

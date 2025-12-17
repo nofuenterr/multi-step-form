@@ -1,5 +1,3 @@
 export default function Addons() {
-  return (
-    <div>Addons</div>
-  )
+	return <div>Addons</div>;
 }
