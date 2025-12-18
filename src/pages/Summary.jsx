@@ -1,13 +1,11 @@
-import { useFormContext, Controller } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { getPrice } from '../utils/getPrice';
-import { useFormStore } from '../store/formStore';
+import Container from '../components/Container';
+import Form from '../components/Form';
 
 export default function Summary() {
-	const { handleSubmit, getValues } = useFormContext();
-	const setFormData = useFormStore((s) => s.setFormData);
-
-	const navigate = useNavigate();
+	const { getValues } = useFormContext();
 
 	const [selectedPlan, isYearly, selectedAddons] = getValues([
 		'plan',
@@ -29,55 +27,61 @@ export default function Summary() {
 	const addonsTotal = addonsPrice.reduce((total, price) => {
 		return (total += price);
 	}, 0);
-
 	const total = planPrice + addonsTotal;
 
-	const submitForm = (data) => {
-		setFormData(data);
-		console.log('Form was submitted', data);
-		navigate('/thank-you');
-	};
-
 	return (
-		<div>
-			<form onSubmit={handleSubmit(submitForm)}>
-				<h1>Finishing up</h1>
-				<p>Double-check everything looks OK before confirming.</p>
-
-				<div>
-					<span>
-						{selectedPlanCapitalized} ({billing})
-					</span>
-					<Link to="/plan">Change</Link>
-					<span>
-						${planPrice}/{billingType}
-					</span>
-				</div>
-
-				{selectedAddons.map((addon) => {
-					return (
-						<div key={addon}>
-							<span>{addon}</span>
-							<span>
-								+${getPrice(isYearly, 'addons', addon)}/{billingType}
+		<Container>
+			<Form
+				heading="Finishing up"
+				paragraph="Double-check everything looks OK before confirming."
+				nextPath="thank-you"
+				formSubmit={true}
+			>
+				<div className="grid gap-6 md:gap-8">
+					<div className="grid gap-4 rounded-lg bg-blue-50 p-4 md:py-5 lg:px-6">
+						<div className="flex items-center justify-between">
+							<div className="text-sm text-blue-950 md:grid md:gap-2">
+								<p className="leading-normal font-medium md:leading-none md:text-balance">
+									{selectedPlanCapitalized} ({billing})
+								</p>
+								<Link
+									to="/plan"
+									className="text-gray-500 hover:text-purple-600"
+								>
+									Change
+								</Link>
+							</div>
+							<span className="font-bold tracking-[1px] md:tracking-normal md:text-balance">
+								${planPrice}/{billingType}
 							</span>
 						</div>
-					);
-				})}
 
-				<div>
-					<span>Total (per {isYearly ? 'year' : 'month'})</span>
-					<span>
-						+${total}/{billingType}
-					</span>
+						{selectedAddons.length > 0 ? (
+							<hr className="text-gray-500" />
+						) : null}
+
+						{selectedAddons.map((addon) => {
+							return (
+								<div key={addon} className="flex items-center justify-between">
+									<span className="text-sm text-gray-500">{addon}</span>
+									<span className="tracking-[1px]">
+										+${getPrice(isYearly, 'addons', addon)}/{billingType}
+									</span>
+								</div>
+							);
+						})}
+					</div>
+
+					<div className="flex items-center justify-between px-4 lg:px-6">
+						<span className="text-sm text-gray-500">
+							Total (per {isYearly ? 'year' : 'month'})
+						</span>
+						<span className="font-bold text-purple-600 md:text-xl">
+							+${total}/{billingType}
+						</span>
+					</div>
 				</div>
-
-				<button type="button" onClick={() => navigate(-1)}>
-					Go back
-				</button>
-
-				<button type="submit">Confirm</button>
-			</form>
-		</div>
+			</Form>
+		</Container>
 	);
 }
