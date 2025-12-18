@@ -39,7 +39,7 @@ export default function Plan() {
 					defaultValue="arcade"
 					render={({ field }) => (
 						<RadioGroup.Root value={field.value} onValueChange={field.onChange}>
-							<RadioGroup.Item value="arcade">
+							<RadioGroup.Item defaultChecked={true} value="arcade">
 								<span>Arcade</span>
 								<span>
 									${getPrice(isYearly, 'plan', 'arcade')}/{billingType}
