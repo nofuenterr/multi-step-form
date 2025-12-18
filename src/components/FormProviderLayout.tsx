@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useFormStore } from '../store/formStore';
 
 const formSchema = z
 	.object({
@@ -10,9 +11,9 @@ const formSchema = z
 		phoneNumber: z.string().min(7, 'Invalid phone number'),
 		plan: z.enum(['arcade', 'advanced', 'pro']),
 		billing: z.boolean(),
-		addons: z.array(
-			z.enum(['onlineService', 'largerStorage', 'customizableProfile'])
-		),
+		addons: z
+			.array(z.enum(['onlineService', 'largerStorage', 'customizableProfile']))
+			.default([]),
 	})
 	.transform((data) => {
 		const prices = {
@@ -46,8 +47,15 @@ const formSchema = z
 		};
 	});
 
+export type formSchemaType = z.infer<typeof formSchema>;
+
 export default function FormProviderLayout() {
-	const form = useForm({ resolver: zodResolver(formSchema), mode: 'onChange' });
+	const data = useFormStore((s: any) => s.formData);
+	const form = useForm({
+		resolver: zodResolver(formSchema),
+		mode: 'onChange',
+		defaultValues: data,
+	});
 
 	return (
 		<FormProvider {...form}>

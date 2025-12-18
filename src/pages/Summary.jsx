@@ -1,21 +1,26 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { getPrice } from '../utils/getPrice';
+import { useFormStore } from '../store/formStore';
 
 export default function Summary() {
-	const { watch, handleSubmit } = useFormContext();
+	const { handleSubmit, getValues } = useFormContext();
+	const setFormData = useFormStore((s) => s.setFormData);
 
 	const navigate = useNavigate();
 
-	const selectedPlan = watch('plan');
+	const [selectedPlan, isYearly, selectedAddons] = getValues([
+		'plan',
+		'billing',
+		'addons',
+	]);
+
 	const selectedPlanCapitalized = selectedPlan
 		.split('')
 		.map((c, i) => (i === 0 ? c.toUpperCase() : c))
 		.join('');
-	const isYearly = watch('billing');
 	const billing = isYearly ? 'Yearly' : 'Monthly';
 	const billingType = isYearly ? 'yr' : 'mo';
-	const selectedAddons = watch('addons');
 
 	const planPrice = getPrice(isYearly, 'plan', selectedPlan);
 	const addonsPrice = selectedAddons.map((addon) => {
@@ -28,6 +33,7 @@ export default function Summary() {
 	const total = planPrice + addonsTotal;
 
 	const submitForm = (data) => {
+		setFormData(data);
 		console.log('Form was submitted', data);
 		navigate('/thank-you');
 	};
