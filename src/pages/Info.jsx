@@ -1,5 +1,5 @@
 import Form from '../components/Form';
-import FormControl from '../components/FormControl';
+import InfoInput from '../components/InfoInput';
 import Container from '../components/Container';
 
 export default function Info() {
@@ -8,23 +8,25 @@ export default function Info() {
 			<Form
 				heading="Personal Info"
 				paragraph="Please provide your name, email address, and phone number."
+				fields={['fullName', 'email', 'phoneNumber']}
+				nextPath="plan"
 			>
 				<div className="grid gap-4 md:gap-6">
-					<FormControl
+					<InfoInput
 						id="fullName"
 						name="fullName"
 						label="Name"
 						type="text"
 						placeholder="e.g. Merlin Hermes"
 					/>
-					<FormControl
+					<InfoInput
 						id="email"
 						name="email"
 						label="Email Address"
 						type="text"
 						placeholder="e.g. merlinhermes@lotm.com"
 					/>
-					<FormControl
+					<InfoInput
 						id="phoneNumber"
 						name="phoneNumber"
 						label="Phone Number"

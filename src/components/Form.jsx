@@ -1,18 +1,23 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 
-export default function Form({ children, heading, paragraph, goBackButton }) {
+export default function Form({
+	children,
+	heading,
+	paragraph,
+	fields,
+	nextPath,
+}) {
 	const { trigger } = useFormContext();
 
+	const location = useLocation();
 	const navigate = useNavigate();
 
-	const infoFields = ['fullName', 'email', 'phoneNumber'];
-
 	const nextStep = async () => {
-		const isValid = await trigger(infoFields, { shouldFocus: true });
+		const isValid = await trigger(fields, { shouldFocus: true });
 
 		if (isValid) {
-			navigate('/plan');
+			navigate(`/${nextPath}`);
 		}
 	};
 
@@ -27,8 +32,8 @@ export default function Form({ children, heading, paragraph, goBackButton }) {
 				{children}
 
 				<div className="mt-auto hidden items-center md:flex">
-					{goBackButton}
-					<Button
+					{location.pathname !== '/' ? <GoBackButton /> : null}
+					<NextStepButton
 						onClick={nextStep}
 						buttonText="Next Step"
 						extraClassNames="md:leading-tight md:text-base md:rounded-lg"
@@ -37,8 +42,8 @@ export default function Form({ children, heading, paragraph, goBackButton }) {
 			</div>
 
 			<div className="flex items-center bg-white p-4 md:hidden">
-				{goBackButton}
-				<Button
+				{location.pathname !== '/' ? <GoBackButton /> : null}
+				<NextStepButton
 					onClick={nextStep}
 					buttonText="Next Step"
 					extraClassNames="rounded text-sm leading-normal"
@@ -48,7 +53,21 @@ export default function Form({ children, heading, paragraph, goBackButton }) {
 	);
 }
 
-function Button({ onClick, buttonText, extraClassNames }) {
+function GoBackButton() {
+	const navigate = useNavigate();
+
+	return (
+		<button
+			className="cursor-pointer border-none bg-transparent font-medium text-gray-500 hover:text-blue-950"
+			type="button"
+			onClick={() => navigate(-1)}
+		>
+			Go Back
+		</button>
+	);
+}
+
+function NextStepButton({ onClick, buttonText, extraClassNames }) {
 	return (
 		<button
 			className={

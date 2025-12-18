@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 
-export default function FormControl({ id, name, label, type, placeholder }) {
+export default function InfoInput({ id, name, label, type, placeholder }) {
 	const {
 		register,
 		formState: { errors },
@@ -10,7 +10,7 @@ export default function FormControl({ id, name, label, type, placeholder }) {
 
 	return (
 		<div className="grid gap-2">
-			<div className="flex items-center items-end justify-between gap-2 text-xs md:text-sm">
+			<div className="flex items-end justify-between gap-2 text-xs md:text-sm">
 				<label className="text-blue-950" htmlFor={id}>
 					{label}
 				</label>
