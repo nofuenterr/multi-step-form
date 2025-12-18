@@ -1,6 +1,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { RadioGroup, Switch } from 'radix-ui';
+import { getPrice } from '../utils/getPrice';
 
 export default function Plan() {
 	const {
@@ -16,6 +17,7 @@ export default function Plan() {
 
 	const selectedPlan = watch('plan');
 	const isYearly = watch('billing');
+	const billingType = isYearly ? 'yr' : 'mo';
 
 	const nextStep = async () => {
 		const isValid = await trigger(planFields, { shouldFocus: true });
@@ -37,11 +39,26 @@ export default function Plan() {
 					defaultValue="arcade"
 					render={({ field }) => (
 						<RadioGroup.Root value={field.value} onValueChange={field.onChange}>
-							<RadioGroup.Item value="arcade">Arcade</RadioGroup.Item>
+							<RadioGroup.Item value="arcade">
+								<span>Arcade</span>
+								<span>
+									${getPrice(isYearly, 'plan', 'arcade')}/{billingType}
+								</span>
+							</RadioGroup.Item>
 
-							<RadioGroup.Item value="advanced">Advanced</RadioGroup.Item>
+							<RadioGroup.Item value="advanced">
+								<span>Advanced</span>
+								<span>
+									${getPrice(isYearly, 'plan', 'advanced')}/{billingType}
+								</span>
+							</RadioGroup.Item>
 
-							<RadioGroup.Item value="pro">Pro</RadioGroup.Item>
+							<RadioGroup.Item value="pro">
+								<span>Pro</span>
+								<span>
+									${getPrice(isYearly, 'plan', 'pro')}/{billingType}
+								</span>
+							</RadioGroup.Item>
 						</RadioGroup.Root>
 					)}
 				/>

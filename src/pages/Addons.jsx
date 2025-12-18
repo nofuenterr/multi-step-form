@@ -1,6 +1,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ToggleGroup } from 'radix-ui';
+import { getPrice } from '../utils/getPrice';
 
 export default function Addons() {
 	const { control, watch } = useFormContext();
@@ -8,6 +9,8 @@ export default function Addons() {
 	const navigate = useNavigate();
 
 	const selectedAddons = watch('addons');
+	const isYearly = watch('billing');
+	const billingType = isYearly ? 'yr' : 'mo';
 
 	const nextStep = () => {
 		navigate('/summary');
@@ -27,14 +30,26 @@ export default function Addons() {
 							<ToggleGroup.Item value="onlineService">
 								<p>Online service</p>
 								<p>Access to multiplayer games</p>
+								<span>
+									+${getPrice(isYearly, 'addons', 'onlineService')}/
+									{billingType}
+								</span>
 							</ToggleGroup.Item>
 							<ToggleGroup.Item value="largerStorage">
 								<p>Larger storage</p>
 								<p>Extra 1TB of cloud save</p>
+								<span>
+									+${getPrice(isYearly, 'addons', 'largerStorage')}/
+									{billingType}
+								</span>
 							</ToggleGroup.Item>
 							<ToggleGroup.Item value="customizableProfile">
 								<p>Customizable profile</p>
 								<p>Custom theme on your profile</p>
+								<span>
+									+${getPrice(isYearly, 'addons', 'customizableProfile')}/
+									{billingType}
+								</span>
 							</ToggleGroup.Item>
 						</ToggleGroup.Root>
 					)}
