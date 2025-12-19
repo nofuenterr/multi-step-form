@@ -35,8 +35,8 @@ Distribution files can be produced using:<br>
 This project is for personal use only. I do not own any of the rights for the assets used in this project.
 
 ### Display
-#### Phone
-![Phone](public/Phone.png)
+#### Mobile
+![Mobile](public/Mobile.png)
 #### Tablet
 ![Tablet](public/Tablet.png)
 #### Desktop: Info Page
