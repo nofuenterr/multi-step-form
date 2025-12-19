@@ -1,11 +1,22 @@
 import { useFormContext, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
 import { ToggleGroup } from 'radix-ui';
 import { getPrice } from '../utils/getPrice';
 import Container from '../components/Container';
 import Form from '../components/Form';
 
 export default function Addons() {
-	const { control } = useFormContext();
+	const { control, trigger } = useFormContext();
+	const navigate = useNavigate();
+	const fields = useMemo(() => ['fullName', 'email', 'phoneNumber'], []);
+
+	useEffect(() => {
+		(async () => {
+			const isValid = await trigger(fields);
+			if (!isValid) navigate('/', { replace: true });
+		})();
+	}, [fields, navigate, trigger]);
 
 	return (
 		<Container>

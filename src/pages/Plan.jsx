@@ -1,4 +1,6 @@
 import { useFormContext, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
 import { RadioGroup, Switch } from 'radix-ui';
 import { getPrice } from '../utils/getPrice';
 import Container from '../components/Container';
@@ -8,7 +10,16 @@ import AdvancedIcon from '../components/ui/AdvancedIcon';
 import ProIcon from '../components/ui/ProIcon';
 
 export default function Plan() {
-	const { control, watch } = useFormContext();
+	const { control, watch, trigger } = useFormContext();
+	const navigate = useNavigate();
+	const fields = useMemo(() => ['fullName', 'email', 'phoneNumber'], []);
+
+	useEffect(() => {
+		(async () => {
+			const isValid = await trigger(fields);
+			if (!isValid) navigate('/', { replace: true });
+		})();
+	}, [fields, navigate, trigger]);
 
 	const isYearly = watch('billing');
 

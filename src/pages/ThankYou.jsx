@@ -1,8 +1,22 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
 import Container from '../components/Container';
 import Form from '../components/Form';
 import { CheckCircledIcon } from '@radix-ui/react-icons';
 
 export default function ThankYou() {
+	const { trigger } = useFormContext();
+	const navigate = useNavigate();
+	const fields = useMemo(() => ['fullName', 'email', 'phoneNumber'], []);
+
+	useEffect(() => {
+		(async () => {
+			const isValid = await trigger(fields);
+			if (!isValid) navigate('/', { replace: true });
+		})();
+	}, [fields, navigate, trigger]);
+
 	return (
 		<Container>
 			<Form formSubmitted={true}>
@@ -16,7 +30,7 @@ export default function ThankYou() {
 					<p className="text-center leading-normal text-gray-500">
 						Thanks for confirming your subscription! We hope you have fun using
 						our platform. If you ever need support, please feel free to email us
-						at support@loremgaming.com.
+						at support@thefoolschurch.com.
 					</p>
 				</div>
 			</Form>

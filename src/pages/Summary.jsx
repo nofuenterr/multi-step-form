@@ -1,11 +1,21 @@
 import { useFormContext } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
 import { getPrice } from '../utils/getPrice';
 import Container from '../components/Container';
 import Form from '../components/Form';
 
 export default function Summary() {
-	const { getValues } = useFormContext();
+	const { getValues, trigger } = useFormContext();
+	const navigate = useNavigate();
+	const fields = useMemo(() => ['fullName', 'email', 'phoneNumber'], []);
+
+	useEffect(() => {
+		(async () => {
+			const isValid = await trigger(fields);
+			if (!isValid) navigate('/', { replace: true });
+		})();
+	}, [fields, navigate, trigger]);
 
 	const [selectedPlan, isYearly, selectedAddons] = getValues([
 		'plan',
