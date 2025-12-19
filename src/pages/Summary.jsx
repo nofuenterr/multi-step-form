@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { getPrice } from '../utils/getPrice';
 import Container from '../components/Container';
 import Form from '../components/Form';
+import splitCapitalizePascalCase from '../utils/splitCapitalizePascalCase.ts';
 
 export default function Summary() {
 	const { getValues, trigger } = useFormContext();
@@ -73,7 +74,9 @@ export default function Summary() {
 						{selectedAddons.map((addon) => {
 							return (
 								<div key={addon} className="flex items-center justify-between">
-									<span className="text-sm text-gray-500">{addon}</span>
+									<span className="text-sm text-gray-500">
+										{splitCapitalizePascalCase(addon)}
+									</span>
 									<span className="tracking-[1px]">
 										+${getPrice(isYearly, 'addons', addon)}/{billingType}
 									</span>
